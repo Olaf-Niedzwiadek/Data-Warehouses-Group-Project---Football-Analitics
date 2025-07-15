@@ -1,0 +1,451 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/18/2025 9:26:04 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="TORANLAPTOP"
+  DTS:CreatorName="TORANLAPTOP\jmosz"
+  DTS:DTSID="{241493A8-83AF-4E73-9E7A-7D4BB6590DF8}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="1045"
+  DTS:ObjectName="DW_Structure"
+  DTS:PackageType="5"
+  DTS:VersionBuild="44"
+  DTS:VersionGUID="{1E227F43-31AC-4CBC-8F83-3D3E5E21B57C}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[ToranLaptop\WAREHOUSESLAB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+      DTS:ObjectName="ToranLaptop\WAREHOUSESLAB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=ToranLaptop\WAREHOUSESLAB;Initial Catalog=MiniProject;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package1-{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}ToranLaptop\WAREHOUSESLAB;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create CompetitionDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{1235c810-9b28-4064-817c-74d2141314f5}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create CompetitionDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Competition table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Competition' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Competition] (&#xA;        [competitionId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NOT NULL,&#xA;        [country] NVARCHAR(50) NULL,&#xA;        [round] NVARCHAR(100) NOT NULL,&#xA;    );&#xA;    &#xA;    PRINT 'DW.Competition table created successfully.';&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Competition_Country' AND t.name = 'Competition' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Competition_Country] ON [DW].[Competition] ([country]);&#xA;        PRINT 'Index IX_DW_Competition_Country created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Competition_Round' AND t.name = 'Competition' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Competition_Round] ON [DW].[Competition] ([round]);&#xA;        PRINT 'Index IX_DW_Competition_Round created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Competition table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create DateDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A0FE596A-D907-4B12-950F-3F5418EE9DB8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create DateDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Date table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t JOIN sys.schemas s ON t.schema_id = s.schema_id WHERE t.name = 'Date' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Date] (&#xA;        [dateId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [date] DATE NOT NULL UNIQUE,&#xA;        [year] SMALLINT NOT NULL CHECK ([year] BETWEEN 1900 AND 9999),&#xA;        [quarter] TINYINT NOT NULL CHECK ([quarter] BETWEEN 1 AND 4),&#xA;        [month] TINYINT NOT NULL CHECK ([month] BETWEEN 1 AND 12),&#xA;        [day] TINYINT NOT NULL CHECK ([day] BETWEEN 1 AND 31),&#xA;        [dayOfWeek] NVARCHAR(10) NOT NULL CHECK ([dayOfWeek] IN ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')),&#xA;        [isWeekend] NVARCHAR(10) NOT NULL,&#xA;        &#xA;        CONSTRAINT [CK_DW_Date_Consistency] CHECK (&#xA;            [year] = YEAR([date]) AND&#xA;            [quarter] = DATEPART(QUARTER, [date]) AND&#xA;            [month] = MONTH([date]) AND&#xA;            [day] = DAY([date]) AND&#xA;            [dayOfWeek] = CASE DATEPART(WEEKDAY, [date])&#xA;                            WHEN 1 THEN 'Sun'&#xA;                            WHEN 2 THEN 'Mon'&#xA;                            WHEN 3 THEN 'Tue'&#xA;                            WHEN 4 THEN 'Wed'&#xA;                            WHEN 5 THEN 'Thu'&#xA;                            WHEN 6 THEN 'Fri'&#xA;                            WHEN 7 THEN 'Sat'&#xA;                          END AND&#xA;            [isWeekend] = CASE WHEN DATEPART(WEEKDAY, [date]) IN (1, 7) THEN 'Weekend' ELSE 'Week' END&#xA;        )&#xA;    );&#xA;    &#xA;    PRINT 'DW.Date table created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Date table already exists.';&#xA;END&#xA;GO&#xA;&#xA;-- Create indexes only if they don't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;              JOIN sys.tables t ON i.object_id = t.object_id &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;              WHERE i.name = 'IX_DW_Date_date' AND t.name = 'Date' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE INDEX [IX_DW_Date_date] ON [DW].[Date] ([date]);&#xA;    PRINT 'Index IX_DW_Date_date created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Index IX_DW_Date_date already exists.';&#xA;END&#xA;GO&#xA;&#xA;IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;              JOIN sys.tables t ON i.object_id = t.object_id &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;              WHERE i.name = 'IX_DW_Date_year' AND t.name = 'Date' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE INDEX [IX_DW_Date_year] ON [DW].[Date] ([year]);&#xA;    PRINT 'Index IX_DW_Date_year created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Index IX_DW_Date_year already exists.';&#xA;END&#xA;GO&#xA;&#xA;IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;              JOIN sys.tables t ON i.object_id = t.object_id &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;              WHERE i.name = 'IX_DW_Date_year_quarter' AND t.name = 'Date' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE INDEX [IX_DW_Date_year_quarter] ON [DW].[Date] ([year], [quarter]);&#xA;    PRINT 'Index IX_DW_Date_year_quarter created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Index IX_DW_Date_year_quarter already exists.';&#xA;END&#xA;GO&#xA;&#xA;IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;              JOIN sys.tables t ON i.object_id = t.object_id &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;              WHERE i.name = 'IX_DW_Date_year_month' AND t.name = 'Date' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE INDEX [IX_DW_Date_year_month] ON [DW].[Date] ([year], [month]);&#xA;    PRINT 'Index IX_DW_Date_year_month created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Index IX_DW_Date_year_month already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create FlagDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{c38f4402-845e-4851-a570-d998e4ff9a4a}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create FlagDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Flag table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Flag' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Flag] (&#xA;        [flagId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [result] NVARCHAR(10) NOT NULL CHECK ([result] IN ('Win', 'Draw', 'Loss', 'Unknown')),&#xA;        [venue] NVARCHAR(7) NOT NULL CHECK ([venue] IN ('Home', 'Away', 'Neutral', 'Unknown')),&#xA;        [baseSquad] NVARCHAR(15) NOT NULL CHECK ([baseSquad] IN ('Base Squad', 'Non-Base Squad', 'Captain', 'Unknown'))&#xA;    );&#xA;    &#xA;    PRINT 'DW.Flag table created successfully.';&#xA;    &#xA;    -- Add indexes on the flag columns for filtering&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Flag_Result' AND t.name = 'Flag' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Flag_Result] ON [DW].[Flag] ([result]);&#xA;        PRINT 'Index IX_DW_Flag_Result created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Flag_Venue' AND t.name = 'Flag' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Flag_Venue] ON [DW].[Flag] ([venue]);&#xA;        PRINT 'Index IX_DW_Flag_Venue created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Flag_BaseSquad' AND t.name = 'Flag' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Flag_BaseSquad] ON [DW].[Flag] ([baseSquad]);&#xA;        PRINT 'Index IX_DW_Flag_BaseSquad created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Flag table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PlayerDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{55fbb508-d2b4-4fc6-86d9-ac34abc594ce}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PlayerDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Player table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Player' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Player] (&#xA;        [playerId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [fullName] NVARCHAR(100) NOT NULL,&#xA;        [nationality] NVARCHAR(50) NOT NULL,&#xA;        [yearBorn] SMALLINT NOT NULL CHECK ([yearBorn] BETWEEN 1900 AND 2050),&#xA;        [defaultPosition] INT NOT NULL,&#xA;        [defaultTeam] INT NULL  -- NULL for free agents&#xA;        &#xA;        CONSTRAINT [FK_DW_Player_Team] FOREIGN KEY ([defaultTeam]) &#xA;            REFERENCES [DW].[Team]([teamId]),&#xA;&#x9;CONSTRAINT [FK_DW_Player_Position] FOREIGN KEY ([defaultPosition]) &#xA;            REFERENCES [DW].[Position]([positionId])&#xA;    );&#xA;    &#xA;    PRINT 'DW.Player table created successfully.';&#xA;    &#xA;    -- Add indexes for common filtering columns&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Player_Name' AND t.name = 'Player' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Player_Name] ON [DW].[Player] ([fullName]);&#xA;        PRINT 'Index IX_DW_Player_Name created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Player_Nationality' AND t.name = 'Player' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Player_Nationality] ON [DW].[Player] ([nationality]);&#xA;        PRINT 'Index IX_DW_Player_Nationality created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Player_DefaultTeam' AND t.name = 'Player' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Player_DefaultTeam] ON [DW].[Player] ([defaultTeam]);&#xA;        PRINT 'Index IX_DW_Player_DefaultTeam created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Player_Position' AND t.name = 'Player' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Player_Position] ON [DW].[Player] ([defaultPosition]);&#xA;        PRINT 'Index IX_DW_Player_Position created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Player table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PlayerPerformanceFact"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{bf75ca69-34fa-40b1-af2d-7c7a6dd183db}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PlayerPerformanceFact"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.PlayerPerformance fact table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[PlayerPerformance] (&#xA;        [performance_id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [player_id] INT NOT NULL,&#xA;        [date_id] INT NOT NULL,&#xA;        [competition_id] INT NOT NULL,&#xA;        [flags_id] INT NOT NULL,&#xA;        [team_id] INT NOT NULL,&#xA;        [opponent_id] INT NOT NULL,&#xA;        [position_id] INT NOT NULL,&#xA;        [Minutes] NUMERIC(10,2) NOT NULL CHECK ([Minutes] &gt;= 0 AND [Minutes] &lt;= 120),&#xA;        [Goals] NUMERIC(10,2) NOT NULL CHECK ([Goals] &gt;= 0),&#xA;        [Assists] NUMERIC(10,2) NOT NULL CHECK ([Assists] &gt;= 0),&#xA;        [PenaltyGoals] NUMERIC(10,2) NOT NULL CHECK ([PenaltyGoals] &gt;= 0),&#xA;        [PenaltiesAttempts] NUMERIC(10,2) NOT NULL CHECK ([PenaltiesAttempts] &gt;= 0),&#xA;        [Shots] NUMERIC(10,2) NOT NULL CHECK ([Shots] &gt;= 0),&#xA;        [ShotsOnTarget] NUMERIC(10,2) NOT NULL CHECK ([ShotsOnTarget] &gt;= 0),&#xA;        [YellowCards] NUMERIC(10,2) NOT NULL CHECK ([YellowCards] &gt;= 0 AND [YellowCards] &lt;= 2),&#xA;        [RedCards] NUMERIC(10,2) NOT NULL CHECK ([RedCards] &gt;= 0 AND [RedCards] &lt;= 1),&#xA;        [Touches] NUMERIC(10,2) NOT NULL CHECK ([Touches] &gt;= 0),&#xA;        [Tackles] NUMERIC(10,2) NOT NULL CHECK ([Tackles] &gt;= 0),&#xA;        [Interceptions] NUMERIC(10,2) NOT NULL CHECK ([Interceptions] &gt;= 0),&#xA;        [ExpectedGoals] NUMERIC(10,2) NOT NULL CHECK ([ExpectedGoals] &gt;= 0),&#xA;        [ExpectedNonPenaltyGoals] NUMERIC(10,2) NOT NULL CHECK ([ExpectedNonPenaltyGoals] &gt;= 0),&#xA;        [ExpectedAssists] NUMERIC(10,2) NOT NULL CHECK ([ExpectedAssists] &gt;= 0),&#xA;        [ShotCreatingActions] NUMERIC(10,2) NOT NULL CHECK ([ShotCreatingActions] &gt;= 0),&#xA;        [GoalCreatingActions] NUMERIC(10,2) NOT NULL CHECK ([GoalCreatingActions] &gt;= 0),&#xA;        [PassesSuccessful] NUMERIC(10,2) NOT NULL CHECK ([PassesSuccessful] &gt;= 0),&#xA;        [PassesAttempts] NUMERIC(10,2) NOT NULL CHECK ([PassesAttempts] &gt;= 0),&#xA;        [PassCompletion] NUMERIC(10,2) NOT NULL CHECK ([PassCompletion] &gt;= 0 AND [PassCompletion] &lt;= 100),&#xA;        [ProgressivePasses] NUMERIC(10,2) NOT NULL CHECK ([ProgressivePasses] &gt;= 0),&#xA;        [Carries] NUMERIC(10,2) NOT NULL CHECK ([Carries] &gt;= 0),&#xA;        [ProgressiveCarries] NUMERIC(10,2) NOT NULL CHECK ([ProgressiveCarries] &gt;= 0),&#xA;        [TakeOnSuccessful] NUMERIC(10,2) NOT NULL CHECK ([TakeOnSuccessful] &gt;= 0),&#xA;        [TakeOnAttempts] NUMERIC(10,2) NOT NULL CHECK ([TakeOnAttempts] &gt;= 0),&#xA;        &#xA;        -- Check constraints for logical relationships&#xA;        CONSTRAINT [CHK_PenaltyGoals_LTE_PenaltiesAttempts] CHECK ([PenaltyGoals] &lt;= [PenaltiesAttempts]),&#xA;        CONSTRAINT [CHK_ShotsOnTarget_LTE_Shots] CHECK ([ShotsOnTarget] &lt;= [Shots]),&#xA;        CONSTRAINT [CHK_PassesSuccessful_LTE_PassesAttempts] CHECK ([PassesSuccessful] &lt;= [PassesAttempts]),&#xA;        CONSTRAINT [CHK_TakeOnSuccessful_LTE_TakeOnAttempts] CHECK ([TakeOnSuccessful] &lt;= [TakeOnAttempts]),&#xA;        CONSTRAINT [CHK_Team_Opponent_Different] CHECK ([team_id] &lt;&gt; [opponent_id] OR [team_id] = 1),&#xA;        &#xA;        -- Foreign key constraints&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Player] FOREIGN KEY ([player_id]) &#xA;            REFERENCES [DW].[Player]([playerId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Date] FOREIGN KEY ([date_id]) &#xA;            REFERENCES [DW].[Date]([dateId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Competition] FOREIGN KEY ([competition_id]) &#xA;            REFERENCES [DW].[Competition]([competitionId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Flags] FOREIGN KEY ([flags_id]) &#xA;            REFERENCES [DW].[Flag]([flagId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Team] FOREIGN KEY ([team_id]) &#xA;            REFERENCES [DW].[Team]([teamId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Opponent] FOREIGN KEY ([opponent_id]) &#xA;            REFERENCES [DW].[Team]([teamId]),&#xA;        CONSTRAINT [FK_DW_PlayerPerformance_Position] FOREIGN KEY ([position_id]) &#xA;            REFERENCES [DW].[Position]([positionId])&#xA;    );&#xA;    &#xA;    PRINT 'DW.PlayerPerformance table created successfully.';&#xA;    &#xA;    -- Add indexes for all foreign keys and commonly filtered columns&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Player' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Player] ON [DW].[PlayerPerformance] ([player_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Player created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Date' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Date] ON [DW].[PlayerPerformance] ([date_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Date created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Competition' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Competition] ON [DW].[PlayerPerformance] ([competition_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Competition created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Team' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Team] ON [DW].[PlayerPerformance] ([team_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Team created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Opponent' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Opponent] ON [DW].[PlayerPerformance] ([opponent_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Opponent created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_Position' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_Position] ON [DW].[PlayerPerformance] ([position_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_Position created successfully.';&#xA;    END&#xA;    &#xA;    -- Add composite indexes for common query patterns&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_PlayerDate' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_PlayerDate] ON [DW].[PlayerPerformance] ([player_id], [date_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_PlayerDate created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_PlayerPerformance_TeamDate' AND t.name = 'PlayerPerformance' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_PlayerPerformance_TeamDate] ON [DW].[PlayerPerformance] ([team_id], [date_id]);&#xA;        PRINT 'Index IX_DW_PlayerPerformance_TeamDate created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.PlayerPerformance table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PositionDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{8b2160e9-9b38-414f-9f87-641dc14fb49e}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PositionDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Position table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Position' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Position] (&#xA;        [positionId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NOT NULL,&#xA;        [role] NVARCHAR(20) NOT NULL CHECK ([role] IN ('Defender', 'Midfielder', 'Forward', 'Goalkeeper', 'Unknown')),&#xA;        [line] NVARCHAR(20) NOT NULL CHECK ([line] IN ('Defending', 'Center', 'Attacking', 'Unknown')),&#xA;        [side] NVARCHAR(20) NOT NULL CHECK ([side] IN ('Left', 'Center', 'Right', 'Unknown')),&#xA;        &#xA;        CONSTRAINT [UQ_DW_Position_Name] UNIQUE ([name])&#xA;    );&#xA;    &#xA;    PRINT 'DW.Position table created successfully.';&#xA;    &#xA;    -- Add indexes for common filtering columns&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Position_Role' AND t.name = 'Position' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Position_Role] ON [DW].[Position] ([role]);&#xA;        PRINT 'Index IX_DW_Position_Role created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Position_Line' AND t.name = 'Position' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Position_Line] ON [DW].[Position] ([line]);&#xA;        PRINT 'Index IX_DW_Position_Line created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Position_Side' AND t.name = 'Position' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Position_Side] ON [DW].[Position] ([side]);&#xA;        PRINT 'Index IX_DW_Position_Side created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Position table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create TeamDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{142d01c6-23c3-4d30-b7e7-0cc8f0c77913}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create TeamDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Create the DW.Team table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Team' AND s.name = 'DW')&#xA;BEGIN&#xA;    CREATE TABLE [DW].[Team] (&#xA;        [teamId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NOT NULL,&#xA;        [country] NVARCHAR(50) NOT NULL,&#xA;        [city] NVARCHAR(50) NOT NULL DEFAULT 'National',&#xA;        &#xA;        -- Optional: Add a constraint for national teams&#xA;        CONSTRAINT [UQ_DW_Team_Name] UNIQUE ([name])&#xA;    );&#xA;    &#xA;    PRINT 'DW.Team table created successfully.';&#xA;    &#xA;    -- Add indexes for common filtering columns&#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Team_Country' AND t.name = 'Team' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Team_Country] ON [DW].[Team] ([country]);&#xA;        PRINT 'Index IX_DW_Team_Country created successfully.';&#xA;    END&#xA;    &#xA;    IF NOT EXISTS (SELECT * FROM sys.indexes i &#xA;                  JOIN sys.tables t ON i.object_id = t.object_id &#xA;                  JOIN sys.schemas s ON t.schema_id = s.schema_id&#xA;                  WHERE i.name = 'IX_DW_Team_City' AND t.name = 'Team' AND s.name = 'DW')&#xA;    BEGIN&#xA;        CREATE INDEX [IX_DW_Team_City] ON [DW].[Team] ([city]);&#xA;        PRINT 'Index IX_DW_Team_City created successfully.';&#xA;    END&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW.Team table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\DW Schema"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{3db110a9-61b1-42d9-bdc6-4a1ea4749c1d}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DW Schema"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1E27D8EF-2D7E-4AEA-AAB9-ABD286288172}"
+          SQLTask:SqlStatementSource="-- Ensure the schema exists&#xA;IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'DW')&#xA;BEGIN&#xA;    EXEC('CREATE SCHEMA [DW]');&#xA;    PRINT 'DW schema created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'DW schema already exists.';&#xA;END&#xA;GO&#xA;"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{A63C496D-61E7-4749-8E4D-C079C1BEC113}"
+      DTS:From="Package\Create DateDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Create CompetitionDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{16CF51B5-D7B2-45B0-B523-49D987D7BDAF}"
+      DTS:From="Package\Create CompetitionDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Create FlagDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{6D55F324-12A1-4531-87C0-A89174183850}"
+      DTS:From="Package\Create FlagDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Create TeamDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{F8A842BF-942F-4D5F-B241-57BA1C1D9BFD}"
+      DTS:From="Package\Create TeamDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Create PositionDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{A106920F-50F4-403A-B828-63F178ED5B9F}"
+      DTS:From="Package\Create PositionDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Create PlayerDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{5394C658-C6C1-4328-98F7-24337CB07BAF}"
+      DTS:From="Package\Create PlayerDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Create PlayerPerformanceFact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{E0C23DED-40B6-4AB8-A919-FAFFBB71AD5B}"
+      DTS:From="Package\DW Schema"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\Create DateDim" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="186.4,41.6"
+          Id="Package\Create CompetitionDim"
+          TopLeft="124.166659882499,80.399999746879" />
+        <NodeLayout
+          Size="154.4,41.6"
+          Id="Package\Create DateDim"
+          TopLeft="368.333313208488,81.266666407519" />
+        <NodeLayout
+          Size="151.2,41.6"
+          Id="Package\Create FlagDim"
+          TopLeft="134.166659336123,208.866666226718" />
+        <NodeLayout
+          Size="160.8,41.6"
+          Id="Package\Create PlayerDim"
+          TopLeft="547.49997008592,316.733333556321" />
+        <NodeLayout
+          Size="221.6,41.6"
+          Id="Package\Create PlayerPerformanceFact"
+          TopLeft="34.9999980876845,317.800000922084" />
+        <NodeLayout
+          Size="168,41.6"
+          Id="Package\Create PositionDim"
+          TopLeft="602.499967080852,211.266665503515" />
+        <NodeLayout
+          Size="157.6,41.6"
+          Id="Package\Create TeamDim"
+          TopLeft="396.666644993757,205.399999584158" />
+        <NodeLayout
+          Size="146.4,41.6"
+          Id="Package\DW Schema"
+          TopLeft="577.499968446793,81.8666693184114" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="368.333313208488,101.633333077199">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-57.766653325989,0"
+              Start="0,0"
+              End="-50.266653325989,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-50.266653325989,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="213.566659609311,121.999999746879">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,86.8666664798391"
+              Start="0,0"
+              End="0,79.3666664798391">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,79.3666664798391" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="285.366659336123,227.933332905438">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="111.299985657634,0"
+              Start="0,0"
+              End="103.799985657634,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="103.799985657634,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="554.266644993757,229.133332543837">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="48.2333220870956,0"
+              Start="0,0"
+              End="40.7333220870956,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="40.7333220870956,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="686.499967080852,252.866665503515">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-58.5999969949322,63.8666680528058"
+              Start="0,0"
+              End="-58.5999969949322,56.3666680528058">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.9333340264029" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,27.9333340264029"
+                    Point2="0,31.9333340264029"
+                    Point3="-4,31.9333340264029" />
+                  <mssgle:LineSegment
+                    End="-54.5999969949322,31.9333340264029" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-54.5999969949322,31.9333340264029"
+                    Point2="-58.5999969949322,31.9333340264029"
+                    Point3="-58.5999969949322,35.9333340264029" />
+                  <mssgle:LineSegment
+                    End="-58.5999969949322,56.3666680528058" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="547.49997008592,338.066667239202">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-290.899971998236,0"
+              Start="0,0"
+              End="-283.399971998236,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-283.399971998236,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="577.499968446793,102.366667862965">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-54.7666552383048,0"
+              Start="0,0"
+              End="-47.2666552383048,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-47.2666552383048,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

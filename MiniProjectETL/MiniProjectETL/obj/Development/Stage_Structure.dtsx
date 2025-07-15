@@ -1,0 +1,451 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/18/2025 9:26:04 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="TORANLAPTOP"
+  DTS:CreatorName="TORANLAPTOP\jmosz"
+  DTS:DTSID="{3BE951D5-9747-41D2-A1FD-DBB0A7055E95}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="1045"
+  DTS:ObjectName="Stage_Structure"
+  DTS:PackageType="5"
+  DTS:VersionBuild="51"
+  DTS:VersionGUID="{1BB31C08-DE76-44B5-97C8-90B194B8346F}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[ToranLaptop\WAREHOUSESLAB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+      DTS:ObjectName="ToranLaptop\WAREHOUSESLAB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=ToranLaptop\WAREHOUSESLAB;Initial Catalog=MiniProject;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package1-{930E7496-FCB5-4D1C-AE5A-F5973677A54B}ToranLaptop\WAREHOUSESLAB;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create CompetitionDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{E9D3949C-DFC2-4D54-9F5B-7342E526204F}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create CompetitionDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Competition table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Competition' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Competition] (&#xA;        [competitionId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NULL,&#xA;        [round] NVARCHAR(100) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.Competition table created successfully.';&#xA;    &#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Competition table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create DateDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{289BE637-6CF7-470D-8E2C-8F3AC0ECECD8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create DateDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Date table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t JOIN sys.schemas s ON t.schema_id = s.schema_id WHERE t.name = 'Date' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Date] (&#xA;        [dateId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [date] DATE NULL UNIQUE,&#xA;        [dayOfWeek] NVARCHAR(10) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.Date table created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Date table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create FlagDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6273DAE6-F8E8-4B49-87DE-D051F877AC13}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create FlagDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Flag table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Flag' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Flag] (&#xA;        [flagId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [result] NVARCHAR(10) NULL,&#xA;        [venue] NVARCHAR(7) NULL,&#xA;        [baseSquad] NVARCHAR(15) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.Flag table created successfully.';&#xA;    &#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Flag table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PlayerDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{D9D567FF-3C65-44EF-AAF5-5D4EB8C15039}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PlayerDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Player table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Player' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Player] (&#xA;        [playerId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [fullName] NVARCHAR(100) NULL,&#xA;        [nationality] NVARCHAR(50) NULL,&#xA;        [yearBorn] SMALLINT NULL,&#xA;        [defaultPosition] NVARCHAR(50) NULL,&#xA;        [defaultTeam] NVARCHAR(50) NULL  -- NULL for free agents &#xA;    );&#xA;    &#xA;    PRINT 'Stage.Player table created successfully.';&#xA;    &#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Player table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PlayerPerformanceFact"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{C43CCD65-7FA7-48FA-A2FB-755F0A37FE2C}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PlayerPerformanceFact"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.PlayerPerformance fact table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'PlayerPerformance' AND s.name = 'Stage')&#xA;BEGIN&#xA;        CREATE TABLE [Stage].[PlayerPerformance] (&#xA;        [performance_id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [player_name] NVARCHAR(100) NULL,&#xA;        [date] DATE NULL,&#xA;        [competition_name] NVARCHAR(100) NULL,&#xA;&#x9;[round] NVARCHAR(100) NULL,&#xA;        [result] NVARCHAR(20) NULL, -- Win/Draw/Loss&#xA;        [venue] NVARCHAR(20) NULL, -- Home/Away/Neutral&#xA;        [base_squad] NVARCHAR(20) NULL, -- Starting/Substitute/Reserve&#xA;        [team_name] NVARCHAR(100) NULL,&#xA;        [opponent_name] NVARCHAR(100) NULL,&#xA;        [position_name] NVARCHAR(50) NULL,&#xA;        [Minutes] NUMERIC(10,2) NULL,&#xA;        [Goals] NUMERIC(10,2) NULL,&#xA;        [Assists] NUMERIC(10,2) NULL,&#xA;        [PenaltyGoals] NUMERIC(10,2) NULL,&#xA;        [PenaltiesAttempts] NUMERIC(10,2) NULL,&#xA;        [Shots] NUMERIC(10,2) NULL,&#xA;        [ShotsOnTarget] NUMERIC(10,2) NULL,&#xA;        [YellowCards] NUMERIC(10,2) NULL,&#xA;        [RedCards] NUMERIC(10,2) NULL,&#xA;        [Touches] NUMERIC(10,2) NULL,&#xA;        [Tackles] NUMERIC(10,2) NULL,&#xA;        [Interceptions] NUMERIC(10,2) NULL,&#xA;        [ExpectedGoals] NUMERIC(10,2) NULL,&#xA;        [ExpectedNonPenaltyGoals] DECIMAL(5,2) NULL,&#xA;        [ExpectedAssists] NUMERIC(10,2) NULL,&#xA;        [ShotCreatingActions] NUMERIC(10,2) NULL,&#xA;        [GoalCreatingActions] NUMERIC(10,2) NULL,&#xA;        [PassesSuccessful] NUMERIC(10,2) NULL,&#xA;        [PassesAttempts] NUMERIC(10,2) NULL,&#xA;        [PassCompletion] NUMERIC(10,2) NULL,&#xA;        [ProgressivePasses] NUMERIC(10,2) NULL,&#xA;        [Carries] NUMERIC(10,2) NULL,&#xA;        [ProgressiveCarries] NUMERIC(10,2) NULL,&#xA;        [TakeOnSuccessful] NUMERIC(10,2) NULL,&#xA;        [TakeOnAttempts] NUMERIC(10,2) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.PlayerPerformance table created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.PlayerPerformance table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create PositionDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{7E860C74-47F3-4CBE-A50A-38BB6495DF88}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create PositionDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Position table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Position' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Position] (&#xA;        [positionId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.Position table created successfully.';&#xA;&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Position table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create TeamDim"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{F965D94B-3A83-4F85-B8D4-4946A169DB37}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create TeamDim"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Create the Stage.Team table if it doesn't exist&#xA;IF NOT EXISTS (SELECT * FROM sys.tables t &#xA;              JOIN sys.schemas s ON t.schema_id = s.schema_id &#xA;              WHERE t.name = 'Team' AND s.name = 'Stage')&#xA;BEGIN&#xA;    CREATE TABLE [Stage].[Team] (&#xA;        [teamId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,&#xA;        [name] NVARCHAR(100) NULL,&#xA;        [county] NVARCHAR(50) NULL,&#xA;        [city] NVARCHAR(50) NULL&#xA;    );&#xA;    &#xA;    PRINT 'Stage.Team table created successfully.';&#xA;    &#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage.Team table already exists.';&#xA;END&#xA;GO"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Stage Schema"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{B19C7712-3A8F-4376-894B-6EDB520C88BC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Stage Schema"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{930E7496-FCB5-4D1C-AE5A-F5973677A54B}"
+          SQLTask:SqlStatementSource="-- Ensure the schema exists&#xA;IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Stage')&#xA;BEGIN&#xA;    EXEC('CREATE SCHEMA [Stage]');&#xA;    PRINT 'Stage schema created successfully.';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT 'Stage schema already exists.';&#xA;END&#xA;GO&#xA;"
+          SQLTask:CodePage="65001" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{2D583A35-5EBC-489F-9855-A9863B6E432D}"
+      DTS:From="Package\Create DateDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Create CompetitionDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{3EAB5C25-CCE3-4CBA-9A4D-6298227364CB}"
+      DTS:From="Package\Create CompetitionDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Create FlagDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{A46BCC4E-C0A2-428B-AC4E-30BD93CFC713}"
+      DTS:From="Package\Create FlagDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Create TeamDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{C23C464A-AB2F-43FB-B0B6-A00B575CD711}"
+      DTS:From="Package\Create TeamDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Create PositionDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{BE0B0AEF-6A6B-4DBE-976C-D641B6049689}"
+      DTS:From="Package\Create PositionDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Create PlayerDim" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{BDEF9949-73FE-46C0-9C0F-DA05E997ABBA}"
+      DTS:From="Package\Create PlayerDim"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Create PlayerPerformanceFact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{95FDA926-19CC-4018-A043-D52C3E54962B}"
+      DTS:From="Package\Stage Schema"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\Create DateDim" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="186.4,41.6"
+          Id="Package\Create CompetitionDim"
+          TopLeft="124.166659882499,80.399999746879" />
+        <NodeLayout
+          Size="154.4,41.6"
+          Id="Package\Create DateDim"
+          TopLeft="368.333313208488,81.266666407519" />
+        <NodeLayout
+          Size="151.2,41.6"
+          Id="Package\Create FlagDim"
+          TopLeft="134.166659336123,208.866666226718" />
+        <NodeLayout
+          Size="160.8,41.6"
+          Id="Package\Create PlayerDim"
+          TopLeft="547.49997008592,316.733333556321" />
+        <NodeLayout
+          Size="221.6,41.6"
+          Id="Package\Create PlayerPerformanceFact"
+          TopLeft="34.9999980876845,317.800000922084" />
+        <NodeLayout
+          Size="168,41.6"
+          Id="Package\Create PositionDim"
+          TopLeft="602.499967080852,211.266665503515" />
+        <NodeLayout
+          Size="157.6,41.6"
+          Id="Package\Create TeamDim"
+          TopLeft="396.666644993757,205.399999584158" />
+        <NodeLayout
+          Size="146.4,41.6"
+          Id="Package\Stage Schema"
+          TopLeft="577.499968446793,81.8666693184114" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="368.333313208488,101.633333077199">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-57.766653325989,0"
+              Start="0,0"
+              End="-50.266653325989,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-50.266653325989,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="213.566659609311,121.999999746879">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,86.8666664798391"
+              Start="0,0"
+              End="0,79.3666664798391">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,79.3666664798391" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="285.366659336123,227.933332905438">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="111.299985657634,0"
+              Start="0,0"
+              End="103.799985657634,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="103.799985657634,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="554.266644993757,229.133332543837">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="48.2333220870956,0"
+              Start="0,0"
+              End="40.7333220870956,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="40.7333220870956,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="686.499967080852,252.866665503515">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-58.5999969949322,63.8666680528058"
+              Start="0,0"
+              End="-58.5999969949322,56.3666680528058">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.9333340264029" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,27.9333340264029"
+                    Point2="0,31.9333340264029"
+                    Point3="-4,31.9333340264029" />
+                  <mssgle:LineSegment
+                    End="-54.5999969949322,31.9333340264029" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-54.5999969949322,31.9333340264029"
+                    Point2="-58.5999969949322,31.9333340264029"
+                    Point3="-58.5999969949322,35.9333340264029" />
+                  <mssgle:LineSegment
+                    End="-58.5999969949322,56.3666680528058" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="547.49997008592,338.066667239202">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-290.899971998236,0"
+              Start="0,0"
+              End="-283.399971998236,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-283.399971998236,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="577.499968446793,102.366667862965">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-54.766655238305,0"
+              Start="0,0"
+              End="-47.266655238305,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-47.266655238305,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
