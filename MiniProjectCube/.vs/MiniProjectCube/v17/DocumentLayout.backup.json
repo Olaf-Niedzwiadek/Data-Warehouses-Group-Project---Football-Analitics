@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\HP\\source\\repos\\MiniProjectCube\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{58D194DF-1982-C3E5-E8B9-22E237D0A3A7}|MiniProjectCube\\MiniProjectCube.dwproj|C:\\Users\\HP\\source\\repos\\MiniProjectCube\\MiniProjectCube\\MiniProject.cube||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design",
+      "RelativeMoniker": "D:0:0:{58D194DF-1982-C3E5-E8B9-22E237D0A3A7}|MiniProjectCube\\MiniProjectCube.dwproj|solutionrelative:MiniProjectCube\\MiniProject.cube||{B4191D15-2D32-45F2-906F-E91BBAAA6059}|Design"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MiniProject.cube [Design]",
+              "DocumentMoniker": "C:\\Users\\HP\\source\\repos\\MiniProjectCube\\MiniProjectCube\\MiniProject.cube",
+              "RelativeDocumentMoniker": "MiniProjectCube\\MiniProject.cube",
+              "ToolTip": "C:\\Users\\HP\\source\\repos\\MiniProjectCube\\MiniProjectCube\\MiniProject.cube [Design]",
+              "RelativeToolTip": "MiniProjectCube\\MiniProject.cube [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-06-20T16:09:56.343Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
